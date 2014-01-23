@@ -96,6 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewModel\ChangelistSetViewModel.cs" />
     <Compile Include="ViewModel\ChangelistViewModel.cs" />
     <Compile Include="View\ChangelistDetail.xaml.cs">
       <DependentUpon>ChangelistDetail.xaml</DependentUpon>
