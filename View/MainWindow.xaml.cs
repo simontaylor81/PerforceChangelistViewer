@@ -1,6 +1,7 @@
 ﻿using PerforceChangelistViewer.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,5 +31,11 @@ namespace PerforceChangelistViewer.View
 		}
 
 		public MainWindowViewModel ViewModel { get; private set; }
+
+		private void Window_Closing(object sender, CancelEventArgs e)
+		{
+			// Dispose ViewModel when we are closed.
+			ViewModel.Dispose();
+		}
 	}
 }
