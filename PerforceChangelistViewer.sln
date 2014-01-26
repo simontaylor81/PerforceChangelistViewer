@@ -5,14 +5,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerforceChangelistViewer", 
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9C38FEC5-C581-4FC7-BEB7-DFA767CE8040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C38FEC5-C581-4FC7-BEB7-DFA767CE8040}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C38FEC5-C581-4FC7-BEB7-DFA767CE8040}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C38FEC5-C581-4FC7-BEB7-DFA767CE8040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C38FEC5-C581-4FC7-BEB7-DFA767CE8040}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9C38FEC5-C581-4FC7-BEB7-DFA767CE8040}.Debug|x64.Build.0 = Debug|Any CPU
+		{9C38FEC5-C581-4FC7-BEB7-DFA767CE8040}.Release|x64.ActiveCfg = Release|Any CPU
+		{9C38FEC5-C581-4FC7-BEB7-DFA767CE8040}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

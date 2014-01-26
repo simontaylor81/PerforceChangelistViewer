@@ -5,20 +5,31 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         
-        <local:ChangelistList Grid.Row="0"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0" Text="{Binding Path=Path, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="1" Command="{Binding GoCommand}">Go</Button>
+        </Grid>
         
-        <GridSplitter Grid.Row="1"
+        <local:ChangelistList Grid.Row="1" DataContext="{Binding ChangelistSet}"/>
+        
+        <GridSplitter Grid.Row="2"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Center"
                       ShowsPreview="True"
                       Height="5"
                       />
         
-        <local:ChangelistDetail/>
+        <local:ChangelistDetail Grid.Row="3" DataContext="{Binding ChangelistSet.SelectedChangelist}"/>
     </Grid>
 </Window>

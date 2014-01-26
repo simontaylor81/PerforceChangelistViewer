@@ -6,6 +6,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Text="Number"/>
+        <TextBlock Grid.Column="1"  Text="{Binding Number}"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="User"/>
+        <TextBlock Grid.Row="1" Grid.Column="1"  Text="{Binding User}"/>
     </Grid>
 </UserControl>

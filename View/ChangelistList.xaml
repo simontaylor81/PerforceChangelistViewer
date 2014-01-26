@@ -6,9 +6,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListView>
+        <ListView ItemsSource="{Binding Changelists}" SelectedItem="{Binding SelectedChangelist}">
             <ListView.View>
-                <GridView></GridView>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Number}"
+                                    Header="Changelist" Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding User}"
+                                    Header="User" Width="100"/>
+                </GridView>
             </ListView.View>
         </ListView>
     </Grid>

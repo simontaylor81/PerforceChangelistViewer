@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="p4api.net">
+      <HintPath>p4api.net\lib\p4api.net.dll</HintPath>
+    </Reference>
     <Reference Include="ReactiveUI">
       <HintPath>packages\reactiveui-core.5.4.0\lib\Portable-Net45+WinRT45+WP8\ReactiveUI.dll</HintPath>
     </Reference>
@@ -98,6 +101,7 @@
     </Compile>
     <Compile Include="ViewModel\ChangelistSetViewModel.cs" />
     <Compile Include="ViewModel\ChangelistViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\ChangelistDetail.xaml.cs">
       <DependentUpon>ChangelistDetail.xaml</DependentUpon>
     </Compile>
@@ -137,13 +141,30 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="p4api.net\lib\p4api.net.dll" />
+    <Content Include="p4api.net\lib\p4api.net.pdb" />
+    <Resource Include="p4api.net\lib\p4api.net.XML" />
+    <RootContent Include="p4api.net\lib\p4bridge.dll" />
+    <RootContent Include="p4api.net\lib\p4bridge.pdb" />
+    <Resource Include="p4api.net\LICENSE.txt" />
+    <Resource Include="p4api.net\README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvailableItemName Include="RootContent">
+      <Visible>false</Visible>
+    </AvailableItemName>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild">
+    <Copy DestinationFolder="$(OutputPath)" SourceFiles="@(RootContent)" SkipUnchangedFiles="true" />
+  </Target>
 </Project>
