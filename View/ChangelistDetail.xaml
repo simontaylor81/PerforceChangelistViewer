@@ -9,6 +9,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -20,5 +21,7 @@
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="User"/>
         <TextBlock Grid.Row="1" Grid.Column="1"  Text="{Binding User}"/>
+        
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Description}"/>
     </Grid>
 </UserControl>

@@ -1,7 +1,10 @@
-﻿using ReactiveUI;
+﻿using PerforceChangelistViewer.Model;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,9 +12,10 @@ using System.Windows.Input;
 namespace PerforceChangelistViewer.ViewModel
 {
 	// Main view-model for the app.
-	public class MainWindowViewModel : ReactiveObject
+	public class MainWindowViewModel : ReactiveObject, IDisposable
 	{
 		public ICommand GoCommand { get; private set; }
+
 
 		// Path to get changelists for
 		private string _path;
@@ -21,35 +25,39 @@ namespace PerforceChangelistViewer.ViewModel
 			set { this.RaiseAndSetIfChanged(ref _path, value); }
 		}
 
-		// The retrieved set of changelists.
-		private ChangelistSetViewModel _changelistSet = new ChangelistSetViewModel();
-		public ChangelistSetViewModel ChangelistSet
-		{
-			get { return _changelistSet; }
-			set { this.RaiseAndSetIfChanged(ref _changelistSet, value); }
-		}
+		// The retrieved set of changelists Doesn't change so no need for notification stuff.
+		public ChangelistSetViewModel ChangelistSet { get; private set; }
 
+		private P4Async p4;
+		private CompositeDisposable disposables = new CompositeDisposable();
 
 		public MainWindowViewModel()
 		{
-			// TEMP
-			Path = "//depot/UE4/dev/...";
+			// Connect to p4.
+			p4 = new P4Async("public.perforce.com:1666");
+			disposables.Add(p4);
 
+			// TEMP: avoid typing the path in every time.
+			Path = "//public/images/...";
+
+			// Can press Go when the Path contains something.
 			var havePathObservable = this.WhenAny(o => o.Path, s =>
 				{
 					return !string.IsNullOrWhiteSpace(s.Value);
 				});
 			var goCommand = new ReactiveCommand(havePathObservable);
 			GoCommand = goCommand;
-			goCommand.Subscribe(o =>
-				{
-					// Temp: add some dummy changelists.
-					ChangelistSet.Changelists.Clear();
-					ChangelistSet.Changelists.Add(new ChangelistViewModel(1234, "staylor"));
-					ChangelistSet.Changelists.Add(new ChangelistViewModel(2345, "staylor"));
-					ChangelistSet.Changelists.Add(new ChangelistViewModel(3456, "staylor"));
-					ChangelistSet.Changelists.Add(new ChangelistViewModel(4567, "staylor"));
-				});
+
+			// When we hit go, get changes from P4.
+			var changes = goCommand.RegisterAsyncTask(o => p4.GetChanges(Path));
+
+			// Pass the stream of change sets to the changelist set vm.
+			ChangelistSet = new ChangelistSetViewModel(changes);
+		}
+
+		public void Dispose()
+		{
+			disposables.Dispose();
 		}
 	}
 }

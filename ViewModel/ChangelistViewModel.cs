@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using Perforce.P4;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,27 +10,19 @@ namespace PerforceChangelistViewer.ViewModel
 {
 	public class ChangelistViewModel : ReactiveObject
 	{
-		// The changelist number.
-		private int _number;
-		public int Number
-		{
-			get { return _number; }
-			set { this.RaiseAndSetIfChanged(ref _number, value); }
-		}
+		// Properties. Since this class is immutable, it does not require the notify stuff.
+		public int Number { get; private set; }			// The changelist number.
+		public string Description { get; private set; }	// Description of the changelist.
+		public string User { get; private set; }		// The user who submitted the changelist.
+		public string Client { get; private set; }		// Clientspec the changelist was submitted by.
 
-		// The user who submitted the changelist
-		private string _user;
-		public string User
+		// Construct from Model representation.
+		public ChangelistViewModel(Changelist changelist)
 		{
-			get { return _user; }
-			set { this.RaiseAndSetIfChanged(ref _user, value); }
-		}
-
-
-		public ChangelistViewModel(int number, string user)
-		{
-			Number = number;
-			User = user;
+			Number = changelist.Id;
+			Description = changelist.Description;
+			User = changelist.OwnerName;
+			Client = changelist.ClientId;
 		}
 	}
 }
