@@ -103,6 +103,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\P4Async.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\ChangelistSetViewModel.cs" />
     <Compile Include="ViewModel\ChangelistViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
