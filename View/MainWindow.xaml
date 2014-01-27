@@ -16,10 +16,23 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
 
             <TextBox Grid.Column="0" Text="{Binding Path=Path, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1" Command="{Binding GoCommand}">Go</Button>
+            <TextBlock Grid.Column="2" TextAlignment="Right" Margin="20,0,4,0">Users</TextBlock>
+            <ComboBox Grid.Column="3" ItemsSource="{Binding Path=ChangelistSet.UsersFilter}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsSelected}" Width="20" />
+                            <TextBlock Text="{Binding Username}" Width="100" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
         
         <local:ChangelistList Grid.Row="1" DataContext="{Binding ChangelistSet}"/>

@@ -104,8 +104,10 @@
     </Compile>
     <Compile Include="Model\P4Async.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Util\Extensions.cs" />
     <Compile Include="ViewModel\ChangelistSetViewModel.cs" />
     <Compile Include="ViewModel\ChangelistViewModel.cs" />
+    <Compile Include="ViewModel\FilteredUserViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\ChangelistDetail.xaml.cs">
       <DependentUpon>ChangelistDetail.xaml</DependentUpon>
