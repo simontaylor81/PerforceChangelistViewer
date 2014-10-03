@@ -37,19 +37,20 @@ namespace PerforceChangelistViewer.ViewModel
 			p4 = new P4Async("public.perforce.com:1666");
 			disposables.Add(p4);
 
-			// Restore last used path. //public/images/...
-			Path = Properties.Settings.Default.LastDepotPath;
+			ChangelistSet = new ChangelistSetViewModel(p4);
+			disposables.Add(ChangelistSet);
 
 			// Can press Go when the Path contains something.
-			var havePathObservable = this.WhenAny(o => o.Path, s =>
-				{
-					return !string.IsNullOrWhiteSpace(s.Value);
-				});
-			var goCommand = new ReactiveCommand(havePathObservable);
+			var havePathObservable = this.ObservableForProperty(o => o.Path, s => !string.IsNullOrWhiteSpace(s) );
+
+			var goCommand = new ReactiveCommand(havePathObservable.CombineLatest(
+				ChangelistSet.FetchChangesCommand.CanExecuteObservable,
+				(a, b) => a && b));
 			GoCommand = goCommand;
 
-			// When we hit go, get changes from P4.
-			var changes = goCommand.RegisterAsyncTask(o => p4.GetChanges(Path));
+			// Fire fetch changes command when the user presses Go.
+			disposables.Add(
+				goCommand.Subscribe(_ => ChangelistSet.FetchChangesCommand.Execute(Path)));
 
 			// Also store the last used path when hitting go.
 			disposables.Add(goCommand.Subscribe(o =>
@@ -58,8 +59,8 @@ namespace PerforceChangelistViewer.ViewModel
 					Properties.Settings.Default.Save();
 				}));
 
-			// Pass the stream of change sets to the changelist set vm.
-			ChangelistSet = new ChangelistSetViewModel(changes);
+			// Restore last used path. //public/images/...
+			Path = Properties.Settings.Default.LastDepotPath;
 		}
 
 		public void Dispose()

@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 using PerforceChangelistViewer.Util;
 using System.Collections.Concurrent;
 using System.Reactive;
+using PerforceChangelistViewer.Model;
+using System.Windows.Input;
+using System.Reactive.Disposables;
 
 namespace PerforceChangelistViewer.ViewModel
 {
-	public class ChangelistSetViewModel : ReactiveObject
+	public class ChangelistSetViewModel : ReactiveObject, IDisposable
 	{
 		// List of changelists in the set.
 		private ObservableAsPropertyHelper<IEnumerable<ChangelistViewModel>> _changelists;
@@ -36,15 +39,38 @@ namespace PerforceChangelistViewer.ViewModel
 			set { this.RaiseAndSetIfChanged(ref _selectedChangelist, value); }
 		}
 
+		public ICommand FetchMoreCommand { get; private set; }
+
+		// Observable to fire when we want to fetch changes. Takes path as parameter.
+		internal ReactiveCommand FetchChangesCommand { get; private set; }
+
 		// Dictionary of exiting filtered users.
 		// Independent of contents of the changelist set so changes to filter aren't lost
 		// when changing the changelist set.
 		// Concurrent as observable notifications might come on any thread.
 		private ConcurrentDictionary<string, FilteredUserViewModel> allFilteredUsers = new ConcurrentDictionary<string, FilteredUserViewModel>();
 
+		private P4Async p4;
+		private CompositeDisposable disposables = new CompositeDisposable();
 
-		public ChangelistSetViewModel(IObservable<IEnumerable<Changelist>> changes)
+
+		public ChangelistSetViewModel(P4Async p4)
 		{
+			this.p4 = p4;
+
+			FetchChangesCommand = new ReactiveCommand();
+
+			var fetchMoreCommand = new ReactiveCommand();
+			FetchMoreCommand = fetchMoreCommand;
+
+			disposables.Add(fetchMoreCommand.Subscribe(o =>
+				{
+					Console.WriteLine("Fetch more changes!");
+				}));
+
+			// Get changes from p4 when FetchChanges is fired.
+			var changes = FetchChangesCommand.RegisterAsyncTask(path => p4.GetChanges((string)path));
+
 			// Get all unique usernames in the changelist set.
 			var usersObservable = changes.Select(clList =>
 				clList
@@ -77,6 +103,15 @@ namespace PerforceChangelistViewer.ViewModel
 
 			_changelists = new ObservableAsPropertyHelper<IEnumerable<ChangelistViewModel>>(
 				viewModelChanges, _ => raisePropertyChanged("Changelists"));
+		}
+
+		public void Dispose()
+		{
+			disposables.Dispose();
+		}
+
+		public void FetchChanges(string path)
+		{
 		}
 	}
 }
